@@ -1,0 +1,17 @@
+name: Build ARM
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt install gcc-arm-linux-gnueabi && sudo apt install make
+
+      - name: Build
+        run: make arm

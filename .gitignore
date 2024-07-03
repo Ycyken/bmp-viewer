@@ -1,1 +1,5 @@
 **/.vscode
+**/.o
+bmp_viewer
+bmp_viewer_arm
+bmp_viewer_riscv
