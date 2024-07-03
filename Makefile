@@ -5,10 +5,13 @@ TARGET = bmp_viewer
 all : $(TARGET)
 
 clean:
-	rm src/*.o $(TARGET)
+	rm -f src/*.o $(TARGET) $(TARGET)_riscv
 
-bmp_viewer.o:
-	gcc -c src/bmp_viewer.c -o src/bmp_viewer.o
+$(TARGET).o:
+	gcc -c src/$(TARGET).c -o src/$(TARGET).o
 
 $(TARGET): bmp_viewer.o
-	gcc src/bmp_viewer.o -o $(TARGET)
+	gcc src/$(TARGET).o -o $(TARGET)
+
+riscv:
+	riscv64-linux-gnu-gcc -static src/$(TARGET).c -o $(TARGET)_riscv
