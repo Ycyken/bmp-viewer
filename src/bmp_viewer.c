@@ -57,11 +57,11 @@ int main(int argc, char** argv) {
     };
     int exit_code = print_bmp_header(&bmp_header);
     switch (exit_code) {
-        case 0: return 0;
         case 1: error("Internal error was occured\n", 1);
         case 3: error("BMP version is CORE (unsupported)\n", 3);
         case 4: error("File format is uncorrect\n", 4);
     }
+    return 0;
 }
 
 static void error(char* error_message, int exit_code) {
@@ -99,7 +99,7 @@ static int print_bmp_header(bmp_header_version3* bmp_header) {
             break;
         }
         default: {
-            error("BMP header is not correct", 4);
+            return 4;
         }
     }
     printf("\t%-*s : %u\n", OUTPUT_ALIGNMENT, "File size", bmp_header->bfSize);
@@ -115,4 +115,5 @@ static int print_bmp_header(bmp_header_version3* bmp_header) {
     }
     printf("\t%-*s : %u\n", OUTPUT_ALIGNMENT, "Bit/pixel", bmp_header->biBitCount);
     printf("\t%-*s : %dx%d\n", OUTPUT_ALIGNMENT, "Pixels/meter", bmp_header->biXPelsPerMeter, bmp_header->biYPelsPerMeter);
+    return 0;
 }
