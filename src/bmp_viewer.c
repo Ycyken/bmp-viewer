@@ -28,8 +28,8 @@ typedef struct bmp_header_version3_t {
 }bmp_header_version3;
 #pragma pack()
 
-static void error(char* error_message, int exit_code);
 static int print_bmp_header(bmp_header_version3* bmp_header);
+static void error(const char* error_message, int exit_code);
 
 /**
  * @return:
@@ -54,17 +54,22 @@ int main(int argc, char** argv) {
     bmp_header_version3 bmp_header;
     if (fread(&bmp_header, HEADER_SIZE, 1, fp) != 1) {
         error("File format is uncorrect\n", 4);
-    };
+    }
     int exit_code = print_bmp_header(&bmp_header);
     switch (exit_code) {
         case 1: error("Internal error was occured\n", 1);
+            break;
+
         case 3: error("BMP version is CORE (unsupported)\n", 3);
+            break;
+
         case 4: error("File format is uncorrect\n", 4);
+            break;
     }
     return 0;
 }
 
-static void error(char* error_message, int exit_code) {
+static void error(const char* error_message, int exit_code) {
     fputs(error_message, stderr);
     exit(exit_code);
 }
@@ -83,24 +88,23 @@ static int print_bmp_header(bmp_header_version3* bmp_header) {
     }
 
     switch (bmp_header->biSize) {
-        case 12: {
+        case 12:
             return 3;
-        }
-        case 40: {
+
+        case 40:
             printf("\t%-*s : %u\n", OUTPUT_ALIGNMENT, "BMP version", 3);
             break;
-        }
-        case 108: {
+
+        case 108:
             printf("\t%-*s : %u\n", OUTPUT_ALIGNMENT, "BMP version", 4);
             break;
-        }
-        case 124: {
+
+        case 124:
             printf("\t%-*s : %u\n", OUTPUT_ALIGNMENT, "BMP version", 5);
             break;
-        }
-        default: {
+
+        default:
             return 4;
-        }
     }
     printf("\t%-*s : %u\n", OUTPUT_ALIGNMENT, "File size", bmp_header->bfSize);
     printf("\t%-*s : %u\n", OUTPUT_ALIGNMENT, "Image Size", bmp_header->biSizeImage);
